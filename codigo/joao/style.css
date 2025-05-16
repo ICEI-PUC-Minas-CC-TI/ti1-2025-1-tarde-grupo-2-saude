@@ -1,53 +1,62 @@
 .page-wrapper {
   display: flex;
-  width: 100%;         /* Makes the wrapper take the full width of its parent (e.g., body) */
-  min-height: 100vh;  /* Optional: Makes the wrapper at least the full height of the viewport */
+  width: 100%;
+  min-height: 100vh;
 }
 
 .sidebar-area {
-  flex: 1; /* This element will take 1 part of the available space */
-  background-color: #f0f0f0; /* Example background */
-  padding: 1rem;             /* Example padding */
+  flex: 1; 
+  background-color: #f0f0f0;
+  padding: 1rem;
 }
 
-.container2 { /* This is your div.container */
-  flex: 3; /* This element will take 2 parts of the available space (twice the sidebar) */
-  background-color: #ffffff; /* Example background */
-  padding: 1rem;             /* Example padding */
+.container2 {
+  flex: 3;
+  background-color: #ffffff;
+  padding: 1rem;
 }
 
-  /* Styles for the container */
 .container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* This creates 3 columns of equal width */
-  gap: 1rem; /* This adds 1rem of space between cards (both rows and columns). Adjust as needed. */
-  padding: 1rem; /* Optional: Adds some padding around the entire container */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 1rem;
 }
 
-/* Basic styling for the cards */
 .card {
-  border: 1px solid #eee; /* Example: adds a light border to the cards */
-  border-radius: 8px;     /* Example: rounds the corners of the cards */
-  overflow: hidden;       /* Ensures content like images respects the border-radius */
-  background-color: #fff; /* Example: sets a background color for cards */
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
 }
 
-/* Styling for the images within the cards */
 .card img.card-img-top {
-  width: 100%; /* Makes the image take the full width of the card */
-  height: auto;  /* Maintains the aspect ratio of the image */
-  display: block;/* Removes any extra space below the image */
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-/* Styling for the card body */
+.card img.card-img-esp {
+  width: 100%;
+  height: auto;
+  display: block;
+  padding: 10%;
+}
+
 .card-body {
-  padding: 1rem; /* Adds some padding inside the card content area */
+  padding: 1rem;
 }
 
-/* Your existing styles for card-title and card-text can remain or be added here */
 .card-title {
   margin-top: 0;
   margin-bottom: 0.5rem;
+}
+
+.card-title-esp {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0rem;
 }
 
 .card-text {
