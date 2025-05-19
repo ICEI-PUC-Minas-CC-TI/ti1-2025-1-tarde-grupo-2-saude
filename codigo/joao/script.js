@@ -1,6 +1,6 @@
 let medico = {
     "doctorId": "1",
-    "profileUrl": "url.com",
+    "profileUrl": "https://google.com",
     "informacoesPessoais": {
         "Nome": "Emily",
         "urlFotoPerfil": "img/exemplomedica.jpeg",
@@ -15,6 +15,9 @@ function carregaMedico(medico) {
         // Update the image
         const img = card.querySelector("img");
         if (img) img.src = medico.informacoesPessoais.urlFotoPerfil;
+
+        const link = card.querySelector("a");
+        if (link) link.href = medico.profileUrl;
 
         // Update the doctor's name
         const title = card.querySelector(".card-title");
