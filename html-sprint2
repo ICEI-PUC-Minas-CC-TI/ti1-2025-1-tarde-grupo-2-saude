@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Especialidades Médicas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --text-color: #2d3748;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --font-main: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: var(--light-bg);
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            transition: var(--transition);
+            font-weight: 500;
+            position: relative;
+        }
+
+        .tab:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .tab.active {
+            border-color: var(--border-color);
+            border-bottom-color: var(--card-bg);
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--secondary-color);
+        }
+
+        .tab-content {
+            display: none;
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
+            box-shadow: var(--box-shadow);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-family: var(--font-main);
+            transition: var(--transition);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #219955;
+        }
+
+        .dynamic-field-container {
+            margin-bottom: 15px;
+        }
+
+        .dynamic-field-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .dynamic-field-item input {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .especialidades-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .especialidade-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            transition: var(--transition);
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .especialidade-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .especialidade-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .especialidade-card h3 i {
+            color: var(--secondary-color);
+        }
+
+        .especialidade-card p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .especialidade-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .especialidade-id {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .tags-container {
+            margin: 15px 0;
+        }
+
+        .tag-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tag i {
+            font-size: 0.7rem;
+        }
+
+        .sintoma-tag {
+            background-color: var(--accent-color);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--border-color);
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-input {
+            padding-left: 40px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                flex: 1 0 auto;
+                text-align: center;
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+            
+            .especialidades-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--accent-color);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <h1>Gestão de Especialidades Médicas</h1>
+            </div>
+            <div class="version">v1.0.0</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="cadastro">
+                <i class="fas fa-plus-circle"></i> Cadastrar
+            </div>
+            <div class="tab" data-tab="lista">
+                <i class="fas fa-list"></i> Lista de Especialidades
+            </div>
+            <div class="tab" data-tab="sobre">
+                <i class="fas fa-info-circle"></i> Sobre
+            </div>
+        </div>
+        
+        <!-- Aba de Cadastro -->
+        <div class="tab-content active" id="cadastro">
+            <form id="especialidadeForm">
+                <div class="form-group">
+                    <label for="nome"><i class="fas fa-tag"></i> Nome da Especialidade</label>
+                    <input type="text" id="nome" placeholder="Ex: Cardiologia" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="descricao"><i class="fas fa-align-left"></i> Descrição</label>
+                    <textarea id="descricao" placeholder="Descreva o foco desta especialidade..." required></textarea>
+                </div>
+                
+                <div class="form-group dynamic-field-container">
+                    <label><i class="fas fa-disease"></i> Doenças Tratadas</label>
+                    <div id="doencasContainer">
+                        <div class="dynamic-field-item">
+                            <input type="text" class="doenca-input" placeholder="Nome da doença">
+                            <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success btn-sm" id="addDoenca">
+                        <i class="fas fa-plus"></i> Adicionar Doença
+                    </button>
+                </div>
+                
+                <div class="form-group dynamic-field-container">
+                    <label><i class="fas fa-thermometer-half"></i> Sintomas Chave</label>
+                    <div id="sintomasContainer">
+                        <div class="dynamic-field-item">
+                            <input type="text" class="sintoma-input" placeholder="Sintoma característico">
+                            <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success btn-sm" id="addSintoma">
+                        <i class="fas fa-plus"></i> Adicionar Sintoma
+                    </button>
+                </div>
+                
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Salvar Especialidade
+                    </button>
+                    <button type="reset" class="btn btn-danger">
+                        <i class="fas fa-eraser"></i> Limpar Formulário
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Aba de Listagem -->
+        <div class="tab-content" id="lista">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar especialidades...">
+            </div>
+            
+            <div class="especialidades-list" id="especialidadesList">
+                <!-- As especialidades cadastradas serão exibidas aqui -->
+            </div>
+        </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Confirmar Ação</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                Tem certeza que deseja excluir esta especialidade?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="confirmAction">Confirmar</button>
+                <button class="btn" id="cancelAction">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sistema de Gerenciamento de Especialidades Médicas
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos DOM
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const form = document.getElementById('especialidadeForm');
+            const doencasContainer = document.getElementById('doencasContainer');
+            const sintomasContainer = document.getElementById('sintomasContainer');
+            const addDoencaBtn = document.getElementById('addDoenca');
+            const addSintomaBtn = document.getElementById('addSintoma');
+            const especialidadesList = document.getElementById('especialidadesList');
+            const searchInput = document.getElementById('searchInput');
+            const confirmModal = document.getElementById('confirmModal');
+            const closeModalBtn = document.querySelector('.close-modal');
+            const cancelActionBtn = document.getElementById('cancelAction');
+            const confirmActionBtn = document.getElementById('confirmAction');
+            
+            // Estado da aplicação
+            let especialidades = JSON.parse(localStorage.getItem('especialidades')) || [];
+            let currentAction = null;
+            let itemToDelete = null;
+
+            // Inicialização
+            initRemoveButtons();
+            renderEspecialidadesList();
+            
+            // Event Listeners
+            tabs.forEach(tab => {
+                tab.addEventListener('click', switchTab);
+            });
+            
+            addDoencaBtn.addEventListener('click', addDoencaField);
+            addSintomaBtn.addEventListener('click', addSintomaField);
+            form.addEventListener('submit', handleFormSubmit);
+            searchInput.addEventListener('input', filterEspecialidades);
+            closeModalBtn.addEventListener('click', closeModal);
+            cancelActionBtn.addEventListener('click', closeModal);
+            confirmActionBtn.addEventListener('click', executeConfirmedAction);
+            
+            // Funções
+            function switchTab(e) {
+                const tab = e.currentTarget;
+                const tabId = tab.dataset.tab;
+                
+                // Atualizar abas
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+                
+                // Atualizar lista se for a aba de listagem
+                if (tabId === 'lista') {
+                    renderEspecialidadesList();
+                }
+            }
+            
+            function addDoencaField() {
+                const fieldHTML = `
+                    <div class="dynamic-field-item">
+                        <input type="text" class="doenca-input" placeholder="Nome da doença">
+                        <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+                    </div>
+                `;
+                doencasContainer.insertAdjacentHTML('beforeend', fieldHTML);
+                initRemoveButtons();
+            }
+            
+            function addSintomaField() {
+                const fieldHTML = `
+                    <div class="dynamic-field-item">
+                        <input type="text" class="sintoma-input" placeholder="Sintoma característico">
+                        <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+                    </div>
+                `;
+                sintomasContainer.insertAdjacentHTML('beforeend', fieldHTML);
+                initRemoveButtons();
+            }
+            
+            function initRemoveButtons() {
+                document.querySelectorAll('.btn-remove').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        // Só remove se houver mais de um campo
+                        if (this.closest('.dynamic-field-container').querySelectorAll('.dynamic-field-item').length > 1) {
+                            this.parentElement.remove();
+                        } else {
+                            this.parentElement.querySelector('input').value = '';
+                        }
+                    });
+                });
+            }
+            
+            function handleFormSubmit(e) {
+                e.preventDefault();
+                
+                // Coletar dados do formulário
+                const nome = document.getElementById('nome').value.trim();
+                const descricao = document.getElementById('descricao').value.trim();
+                
+                const doencas = Array.from(document.querySelectorAll('.doenca-input'))
+                    .map(input => input.value.trim())
+                    .filter(value => value !== '');
+                    
+                const sintomas = Array.from(document.querySelectorAll('.sintoma-input'))
+                    .map(input => input.value.trim())
+                    .filter(value => value !== '');
+                
+                // Validação
+                if (!nome || !descricao) {
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                    return;
+                }
+                
+                if (doencas.length === 0 || sintomas.length === 0) {
+                    alert('Por favor, adicione pelo menos uma doença e um sintoma.');
+                    return;
+                }
+                
+                // Criar nova especialidade
+                const novaEspecialidade = {
+                    id: especialidades.length > 0 ? Math.max(...especialidades.map(e => e.id)) + 1 : 1,
+                    nome,
+                    descricao,
+                    doencas_principais: doencas,
+                    sintomas_chave: sintomas,
+                    dataCadastro: new Date().toISOString()
+                };
+                
+                // Adicionar à lista
+                especialidades.push(novaEspecialidade);
+                saveToLocalStorage();
+                
+                // Limpar formulário
+                form.reset();
+                resetDynamicFields();
+                
+                // Feedback e mudança para a aba de listagem
+                alert('Especialidade cadastrada com sucesso!');
+                document.querySelector('.tab[data-tab="lista"]').click();
+            }
+            
+            function resetDynamicFields() {
+                doencasContainer.innerHTML = `
+                    <div class="dynamic-field-item">
+                        <input type="text" class="doenca-input" placeholder="Nome da doença">
+                        <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+                    </div>
+                `;
+                
+                sintomasContainer.innerHTML = `
+                    <div class="dynamic-field-item">
+                        <input type="text" class="sintoma-input" placeholder="Sintoma característico">
+                        <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+                    </div>
+                `;
+                
+                initRemoveButtons();
+            }
+            
+            function renderEspecialidadesList(filter = '') {
+                especialidadesList.innerHTML = '';
+                
+                const filteredEspecialidades = filter 
+                    ? especialidades.filter(esp => 
+                        esp.nome.toLowerCase().includes(filter.toLowerCase()) ||
+                        esp.descricao.toLowerCase().includes(filter.toLowerCase()) ||
+                        esp.doencas_principais.some(d => d.toLowerCase().includes(filter.toLowerCase())) ||
+                        esp.sintomas_chave.some(s => s.toLowerCase().includes(filter.toLowerCase()))
+                      )
+                    : especialidades;
+                
+                if (filteredEspecialidades.length === 0) {
+                    especialidadesList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-search"></i>
+                            <h3>Nenhuma especialidade encontrada</h3>
+                            <p>${filter ? 'Sua busca não retornou resultados' : 'Nenhuma especialidade cadastrada ainda'}</p>
+                            <button class="btn btn-primary" onclick="document.querySelector('.tab[data-tab=\\'cadastro\\']').click()">
+                                <i class="fas fa-plus-circle"></i> Cadastrar Nova Especialidade
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                filteredEspecialidades.forEach(especialidade => {
+                    const card = document.createElement('div');
+                    card.className = 'especialidade-card';
+                    
+                    card.innerHTML = `
+                        <div class="especialidade-meta">
+                            <span>ID: <span class="especialidade-id">${especialidade.id}</span></span>
+                            <span><i class="far fa-calendar-alt"></i> ${new Date(especialidade.dataCadastro).toLocaleDateString()}</span>
+                        </div>
+                        
+                        <h3><i class="fas fa-user-md"></i> ${especialidade.nome}</h3>
+                        <p>${especialidade.descricao}</p>
+                        
+                        <div class="tags-container">
+                            <div class="tag-title"><i class="fas fa-disease"></i> Doenças Tratadas</div>
+                            <div class="tag-list">
+                                ${especialidade.doencas_principais.map(doenca => 
+                                    `<span class="tag">${doenca}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="tags-container">
+                            <div class="tag-title"><i class="fas fa-thermometer-half"></i> Sintomas Chave</div>
+                            <div class="tag-list">
+                                ${especialidade.sintomas_chave.map(sintoma => 
+                                    `<span class="tag sintoma-tag">${sintoma}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="card-actions">
+                            <button class="btn btn-primary btn-sm btn-edit" data-id="${especialidade.id}">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn btn-danger btn-sm btn-delete" data-id="${especialidade.id}">
+                                <i class="fas fa-trash-alt"></i> Excluir
+                            </button>
+                        </div>
+                    `;
+                    
+                    especialidadesList.appendChild(card);
+                });
+                
+                // Adicionar eventos aos botões de ação
+                document.querySelectorAll('.btn-edit').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        editEspecialidade(id);
+                    });
+                });
+                
+                document.querySelectorAll('.btn-delete').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        showDeleteConfirmation(id);
+                    });
+                });
+            }
+            
+            function editEspecialidade(id) {
+                const especialidade = especialidades.find(esp => esp.id === id);
+                if (!especialidade) return;
+                
+                // Preencher formulário
+                document.getElementById('nome').value = especialidade.nome;
+                document.getElementById('descricao').value = especialidade.descricao;
+                
+                // Limpar campos dinâmicos
+                doencasContainer.innerHTML = '';
+                sintomasContainer.innerHTML = '';
+                
+                // Adicionar doenças
+                especialidade.doencas_principais.forEach(doenca => {
+                    doencasContainer.insertAdjacentHTML('beforeend', `
+                        <div class="dynamic-field-item">
+                            <input type="text" class="doenca-input" value="${doenca}">
+                            <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+                        </div>
+                    `);
+                });
+                
+                // Adicionar sintomas
+                especialidade.sintomas_chave.forEach(sintoma => {
+                    sintomasContainer.insertAdjacentHTML('beforeend', `
+                        <div class="dynamic-field-item">
+                            <input type="text" class="sintoma-input" value="${sintoma}">
+                            <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+                        </div>
+                    `);
+                });
+                
+                // Remover a especialidade da lista (será readicionada ao salvar)
+                especialidades = especialidades.filter(esp => esp.id !== id);
+                saveToLocalStorage();
+                
+                // Mudar para a aba de cadastro
+                document.querySelector('.tab[data-tab="cadastro"]').click();
+                
+                // Scroll para o topo
+                window.scrollTo(0, 0);
+            }
+            
+            function showDeleteConfirmation(id) {
+                const especialidade = especialidades.find(esp => esp.id === id);
+                if (!especialidade) return;
+                
+                document.getElementById('modalTitle').textContent = `Excluir ${especialidade.nome}`;
+                document.getElementById('modalBody').innerHTML = `
+                    <p>Tem certeza que deseja excluir a especialidade <strong>${especialidade.nome}</strong>?</p>
+                    <p>Esta ação não pode ser desfeita.</p>
+                `;
+                
+                itemToDelete = id;
+                confirmModal.style.display = 'flex';
+            }
+            
+            function closeModal() {
+                confirmModal.style.display = 'none';
+                itemToDelete = null;
+            }
+            
+            function executeConfirmedAction() {
+                if (itemToDelete) {
+                    especialidades = especialidades.filter(esp => esp.id !== itemToDelete);
+                    saveToLocalStorage();
+                    renderEspecialidadesList(searchInput.value);
+                    closeModal();
+                }
+            }
+            
+            function filterEspecialidades() {
+                renderEspecialidadesList(this.value);
+            }
+            
+            function saveToLocalStorage() {
+                localStorage.setItem('especialidades', JSON.stringify(especialidades));
+            }
+        });
+    </script>
+</body>
+</html>

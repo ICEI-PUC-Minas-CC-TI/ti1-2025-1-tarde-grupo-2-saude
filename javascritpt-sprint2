@@ -1,0 +1,324 @@
+
+// Sistema de Gerenciamento de Especialidades Médicas
+document.addEventListener('DOMContentLoaded', function() {
+    // Elementos DOM
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const form = document.getElementById('especialidadeForm');
+    const doencasContainer = document.getElementById('doencasContainer');
+    const sintomasContainer = document.getElementById('sintomasContainer');
+    const addDoencaBtn = document.getElementById('addDoenca');
+    const addSintomaBtn = document.getElementById('addSintoma');
+    const especialidadesList = document.getElementById('especialidadesList');
+    const searchInput = document.getElementById('searchInput');
+    const confirmModal = document.getElementById('confirmModal');
+    const closeModalBtn = document.querySelector('.close-modal');
+    const cancelActionBtn = document.getElementById('cancelAction');
+    const confirmActionBtn = document.getElementById('confirmAction');
+    
+    // Estado da aplicação
+    let especialidades = JSON.parse(localStorage.getItem('especialidades')) || [];
+    let itemToDelete = null;
+
+    // Inicialização
+    initRemoveButtons();
+    renderEspecialidadesList();
+    
+    // Event Listeners
+    tabs.forEach(tab => {
+        tab.addEventListener('click', switchTab);
+    });
+    
+    addDoencaBtn.addEventListener('click', addDoencaField);
+    addSintomaBtn.addEventListener('click', addSintomaField);
+    form.addEventListener('submit', handleFormSubmit);
+    searchInput.addEventListener('input', filterEspecialidades);
+    closeModalBtn.addEventListener('click', closeModal);
+    cancelActionBtn.addEventListener('click', closeModal);
+    confirmActionBtn.addEventListener('click', executeConfirmedAction);
+    
+    // Funções principais
+    function switchTab(e) {
+        const tab = e.currentTarget;
+        const tabId = tab.dataset.tab;
+        
+        // Atualizar abas
+        tabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+        
+        tab.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+        
+        // Atualizar lista se for a aba de listagem
+        if (tabId === 'lista') {
+            renderEspecialidadesList();
+        }
+    }
+    
+    function addDoencaField() {
+        const fieldHTML = `
+            <div class="dynamic-field-item">
+                <input type="text" class="doenca-input" placeholder="Nome da doença">
+                <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+            </div>
+        `;
+        doencasContainer.insertAdjacentHTML('beforeend', fieldHTML);
+        initRemoveButtons();
+    }
+    
+    function addSintomaField() {
+        const fieldHTML = `
+            <div class="dynamic-field-item">
+                <input type="text" class="sintoma-input" placeholder="Sintoma característico">
+                <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+            </div>
+        `;
+        sintomasContainer.insertAdjacentHTML('beforeend', fieldHTML);
+        initRemoveButtons();
+    }
+    
+    function initRemoveButtons() {
+        document.querySelectorAll('.btn-remove').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Só remove se houver mais de um campo
+                if (this.closest('.dynamic-field-container').querySelectorAll('.dynamic-field-item').length > 1) {
+                    this.parentElement.remove();
+                } else {
+                    this.parentElement.querySelector('input').value = '';
+                }
+            });
+        });
+    }
+    
+    function handleFormSubmit(e) {
+        e.preventDefault();
+        
+        // Coletar dados do formulário
+        const nome = document.getElementById('nome').value.trim();
+        const descricao = document.getElementById('descricao').value.trim();
+        
+        const doencas = Array.from(document.querySelectorAll('.doenca-input'))
+            .map(input => input.value.trim())
+            .filter(value => value !== '');
+            
+        const sintomas = Array.from(document.querySelectorAll('.sintoma-input'))
+            .map(input => input.value.trim())
+            .filter(value => value !== '');
+        
+        // Validação
+        if (!nome || !descricao) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
+        
+        if (doencas.length === 0 || sintomas.length === 0) {
+            alert('Por favor, adicione pelo menos uma doença e um sintoma.');
+            return;
+        }
+        
+        // Criar nova especialidade
+        const novaEspecialidade = {
+            id: especialidades.length > 0 ? Math.max(...especialidades.map(e => e.id)) + 1 : 1,
+            nome,
+            descricao,
+            doencas_principais: doencas,
+            sintomas_chave: sintomas,
+            dataCadastro: new Date().toISOString()
+        };
+        
+        // Adicionar à lista
+        especialidades.push(novaEspecialidade);
+        saveToLocalStorage();
+        
+        // Limpar formulário
+        form.reset();
+        resetDynamicFields();
+        
+        // Feedback e mudança para a aba de listagem
+        alert('Especialidade cadastrada com sucesso!');
+        document.querySelector('.tab[data-tab="lista"]').click();
+    }
+    
+    function resetDynamicFields() {
+        doencasContainer.innerHTML = `
+            <div class="dynamic-field-item">
+                <input type="text" class="doenca-input" placeholder="Nome da doença">
+                <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+            </div>
+        `;
+        
+        sintomasContainer.innerHTML = `
+            <div class="dynamic-field-item">
+                <input type="text" class="sintoma-input" placeholder="Sintoma característico">
+                <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+            </div>
+        `;
+        
+        initRemoveButtons();
+    }
+    
+    function renderEspecialidadesList(filter = '') {
+        especialidadesList.innerHTML = '';
+        
+        const filteredEspecialidades = filter 
+            ? especialidades.filter(esp => 
+                esp.nome.toLowerCase().includes(filter.toLowerCase()) ||
+                esp.descricao.toLowerCase().includes(filter.toLowerCase()) ||
+                esp.doencas_principais.some(d => d.toLowerCase().includes(filter.toLowerCase())) ||
+                esp.sintomas_chave.some(s => s.toLowerCase().includes(filter.toLowerCase()))
+              )
+            : especialidades;
+        
+        if (filteredEspecialidades.length === 0) {
+            especialidadesList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <h3>Nenhuma especialidade encontrada</h3>
+                    <p>${filter ? 'Sua busca não retornou resultados' : 'Nenhuma especialidade cadastrada ainda'}</p>
+                    <button class="btn btn-primary" onclick="document.querySelector('.tab[data-tab=\\'cadastro\\']').click()">
+                        <i class="fas fa-plus-circle"></i> Cadastrar Nova Especialidade
+                    </button>
+                </div>
+            `;
+            return;
+        }
+        
+        filteredEspecialidades.forEach(especialidade => {
+            const card = document.createElement('div');
+            card.className = 'especialidade-card';
+            
+            card.innerHTML = `
+                <div class="especialidade-meta">
+                    <span>ID: <span class="especialidade-id">${especialidade.id}</span></span>
+                    <span><i class="far fa-calendar-alt"></i> ${new Date(especialidade.dataCadastro).toLocaleDateString()}</span>
+                </div>
+                
+                <h3><i class="fas fa-user-md"></i> ${especialidade.nome}</h3>
+                <p>${especialidade.descricao}</p>
+                
+                <div class="tags-container">
+                    <div class="tag-title"><i class="fas fa-disease"></i> Doenças Tratadas</div>
+                    <div class="tag-list">
+                        ${especialidade.doencas_principais.map(doenca => 
+                            `<span class="tag">${doenca}</span>`
+                        ).join('')}
+                    </div>
+                </div>
+                
+                <div class="tags-container">
+                    <div class="tag-title"><i class="fas fa-thermometer-half"></i> Sintomas Chave</div>
+                    <div class="tag-list">
+                        ${especialidade.sintomas_chave.map(sintoma => 
+                            `<span class="tag sintoma-tag">${sintoma}</span>`
+                        ).join('')}
+                    </div>
+                </div>
+                
+                <div class="card-actions">
+                    <button class="btn btn-primary btn-sm btn-edit" data-id="${especialidade.id}">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="btn btn-danger btn-sm btn-delete" data-id="${especialidade.id}">
+                        <i class="fas fa-trash-alt"></i> Excluir
+                    </button>
+                </div>
+            `;
+            
+            especialidadesList.appendChild(card);
+        });
+        
+        // Adicionar eventos aos botões de ação
+        document.querySelectorAll('.btn-edit').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = parseInt(this.dataset.id);
+                editEspecialidade(id);
+            });
+        });
+        
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = parseInt(this.dataset.id);
+                showDeleteConfirmation(id);
+            });
+        });
+    }
+    
+    function editEspecialidade(id) {
+        const especialidade = especialidades.find(esp => esp.id === id);
+        if (!especialidade) return;
+        
+        // Preencher formulário
+        document.getElementById('nome').value = especialidade.nome;
+        document.getElementById('descricao').value = especialidade.descricao;
+        
+        // Limpar campos dinâmicos
+        doencasContainer.innerHTML = '';
+        sintomasContainer.innerHTML = '';
+        
+        // Adicionar doenças
+        especialidade.doencas_principais.forEach(doenca => {
+            doencasContainer.insertAdjacentHTML('beforeend', `
+                <div class="dynamic-field-item">
+                    <input type="text" class="doenca-input" value="${doenca}">
+                    <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+                </div>
+            `);
+        });
+        
+        // Adicionar sintomas
+        especialidade.sintomas_chave.forEach(sintoma => {
+            sintomasContainer.insertAdjacentHTML('beforeend', `
+                <div class="dynamic-field-item">
+                    <input type="text" class="sintoma-input" value="${sintoma}">
+                    <button type="button" class="btn btn-danger btn-sm btn-remove"><i class="fas fa-times"></i></button>
+                </div>
+            `);
+        });
+        
+        // Remover a especialidade da lista (será readicionada ao salvar)
+        especialidades = especialidades.filter(esp => esp.id !== id);
+        saveToLocalStorage();
+        
+        // Mudar para a aba de cadastro
+        document.querySelector('.tab[data-tab="cadastro"]').click();
+        
+        // Scroll para o topo
+        window.scrollTo(0, 0);
+    }
+    
+    function showDeleteConfirmation(id) {
+        const especialidade = especialidades.find(esp => esp.id === id);
+        if (!especialidade) return;
+        
+        document.getElementById('modalTitle').textContent = `Excluir ${especialidade.nome}`;
+        document.getElementById('modalBody').innerHTML = `
+            <p>Tem certeza que deseja excluir a especialidade <strong>${especialidade.nome}</strong>?</p>
+            <p>Esta ação não pode ser desfeita.</p>
+        `;
+        
+        itemToDelete = id;
+        confirmModal.style.display = 'flex';
+    }
+    
+    function closeModal() {
+        confirmModal.style.display = 'none';
+        itemToDelete = null;
+    }
+    
+    function executeConfirmedAction() {
+        if (itemToDelete) {
+            especialidades = especialidades.filter(esp => esp.id !== itemToDelete);
+            saveToLocalStorage();
+            renderEspecialidadesList(searchInput.value);
+            closeModal();
+        }
+    }
+    
+    function filterEspecialidades() {
+        renderEspecialidadesList(this.value);
+    }
+    
+    function saveToLocalStorage() {
+        localStorage.setItem('especialidades', JSON.stringify(especialidades));
+    }
+});

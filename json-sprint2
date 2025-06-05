@@ -1,0 +1,39 @@
+{
+    "especialidades": [
+      {
+        "id": 1,
+        "nome": "Cardiologia",
+        "descricao": "Trata doenças do coração e sistema circulatório",
+        "doencas_principais": ["Hipertensão", "Infarto", "Arritmia", "Insuficiência Cardíaca"],
+        "sintomas_chave": ["Dor no peito", "Falta de ar", "Palpitações", "Inchaço nas pernas"]
+      },
+      {
+        "id": 2,
+        "nome": "Ortopedia",
+        "descricao": "Especializada em problemas musculoesqueléticos",
+        "doencas_principais": ["Artrose", "Hérnia de Disco", "Fraturas", "Tendinite"],
+        "sintomas_chave": ["Dor nas articulações", "Limitação de movimento", "Inchaço", "Deformidades"]
+      },
+      {
+        "id": 3,
+        "nome": "Pediatria",
+        "descricao": "Cuidados médicos para crianças e adolescentes",
+        "doencas_principais": ["Asma", "Alergias", "Infecções infantis", "Distúrbios do crescimento"],
+        "sintomas_chave": ["Febre", "Tosse persistente", "Dificuldade alimentar", "Atraso no desenvolvimento"]
+      },
+      {
+        "id": 4,
+        "nome": "Dermatologia",
+        "descricao": "Trata doenças da pele, cabelos e unhas",
+        "doencas_principais": ["Acne", "Psoríase", "Eczema", "Melanoma"],
+        "sintomas_chave": ["Coceira", "Manchas na pele", "Descamação", "Lesões cutâneas"]
+      },
+      {
+        "id": 5,
+        "nome": "Ginecologia",
+        "descricao": "Saúde do sistema reprodutor feminino",
+        "doencas_principais": ["Endometriose", "Mioma", "Infecções ginecológicas", "Síndrome dos Ovários Policísticos"],
+        "sintomas_chave": ["Dor pélvica", "Alterações menstruais", "Corrimento", "Infertilidade"]
+      }
+    ]
+  }
