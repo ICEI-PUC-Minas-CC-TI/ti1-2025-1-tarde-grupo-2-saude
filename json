@@ -1,0 +1,39 @@
+{
+  "usuario": {
+    "idade": 28,
+    "genero": "feminino",
+    "localizacao": {
+      "cidade": "Belo Horizonte",
+      "estado": "MG",
+      "pais": "Brasil"
+    }
+  },
+  "sintomas": [
+    "dores abdominais",
+    "náusea",
+    "inchaço"
+  ],
+  "recomendacoes": [
+    {
+      "especialidade": "Gastroenterologia",
+      "motivo": "Sintomas relacionados ao sistema digestivo, como dores abdominais e náusea.",
+      "link_confiavel": "https://www.doctoralia.com.br/gastroenterologista",
+      "plataforma": "Doctoralia",
+      "tipo_link": "busca"
+    },
+    {
+      "especialidade": "Clínico Geral",
+      "motivo": "Para avaliação clínica inicial e possível encaminhamento a um especialista.",
+      "link_confiavel": "https://www.drconsulta.com/especialidades/clinico-geral",
+      "plataforma": "Dr.Consulta",
+      "tipo_link": "agendamento direto"
+    },
+    {
+      "especialidade": "Nutricionista",
+      "motivo": "Possível relação com alimentação inadequada ou intolerâncias alimentares.",
+      "link_confiavel": "https://www.tuasaude.com/nutricionistas/",
+      "plataforma": "Tua Saúde",
+      "tipo_link": "informativo"
+    }
+  ]
+}

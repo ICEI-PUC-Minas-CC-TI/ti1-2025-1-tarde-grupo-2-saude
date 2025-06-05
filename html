@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaúdeTotal - Busca de Doenças</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cae;
+            --accent-color: #ff7e5f;
+            --text-color: #2d3748;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --font-main: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --border-radius: 0.5rem;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: var(--light-bg);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .search-container {
+            display: flex;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            outline: none;
+        }
+
+        .search-button {
+            padding: 0 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .search-button:hover {
+            background-color: #3a5a8f;
+        }
+
+        .results-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .disease-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .disease-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .disease-name {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .disease-category {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-results {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 2rem;
+            color: var(--secondary-color);
+        }
+
+        .highlight {
+            background-color: #fffacd;
+            font-weight: bold;
+            padding: 0 2px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                border-radius: var(--border-radius);
+                margin-bottom: 0.5rem;
+            }
+            
+            .search-button {
+                border-radius: var(--border-radius);
+                padding: 0.75rem;
+            }
+            
+            .results-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Busca de Doenças</h1>
+            <p>Encontre informações sobre mais de 50 condições médicas</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="Digite o nome da doença ou sintoma...">
+            <button id="search-button" class="search-button">Buscar</button>
+        </div>
+
+        <div id="results-container" class="results-container">
+            <!-- Os resultados serão inseridos aqui pelo JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Banco de dados com mais de 50 doenças
+        const diseasesDatabase = [
+            // Doenças gastrointestinais
+            { name: "Gastrite", description: "Inflamação do revestimento do estômago.", symptoms: "Dor abdominal, náusea, indigestão", category: "Gastrointestinal" },
+            { name: "Síndrome do Intestino Irritável", description: "Distúrbio intestinal crônico.", symptoms: "Diarreia, constipação, dor abdominal", category: "Gastrointestinal" },
+            { name: "Doença de Crohn", description: "Doença inflamatória intestinal.", symptoms: "Diarreia, fadiga, perda de peso", category: "Gastrointestinal" },
+            { name: "Colite Ulcerativa", description: "Inflamação do cólon e reto.", symptoms: "Diarreia com sangue, dor abdominal", category: "Gastrointestinal" },
+            { name: "Hepatite A", description: "Infecção viral do fígado.", symptoms: "Fadiga, náusea, dor abdominal", category: "Gastrointestinal" },
+            { name: "Hepatite B", description: "Infecção hepática grave.", symptoms: "Dor abdominal, urina escura, febre", category: "Gastrointestinal" },
+            { name: "Pancreatite", description: "Inflamação do pâncreas.", symptoms: "Dor abdominal superior, náusea", category: "Gastrointestinal" },
+            { name: "Doença Celíaca", description: "Intolerância ao glúten.", symptoms: "Diarreia, inchaço, fadiga", category: "Gastrointestinal" },
+            { name: "Diverticulite", description: "Inflamação de divertículos no cólon.", symptoms: "Dor abdominal, febre, náusea", category: "Gastrointestinal" },
+            { name: "Úlcera Péptica", description: "Feridas no estômago ou duodeno.", symptoms: "Dor abdominal, queimação", category: "Gastrointestinal" },
+
+            // Doenças respiratórias
+            { name: "Asma", description: "Doença inflamatória das vias aéreas.", symptoms: "Falta de ar, chiado no peito", category: "Respiratória" },
+            { name: "DPOC", description: "Doença pulmonar obstrutiva crônica.", symptoms: "Falta de ar, tosse crônica", category: "Respiratória" },
+            { name: "Pneumonia", description: "Infecção dos pulmões.", symptoms: "Tosse com catarro, febre", category: "Respiratória" },
+            { name: "Bronquite", description: "Inflamação dos brônquios.", symptoms: "Tosse, produção de muco", category: "Respiratória" },
+            { name: "Tuberculose", description: "Infecção bacteriana dos pulmões.", symptoms: "Tosse persistente, febre", category: "Respiratória" },
+            { name: "Enfisema Pulmonar", description: "Danos aos alvéolos pulmonares.", symptoms: "Falta de ar, tosse", category: "Respiratória" },
+            { name: "Fibrose Pulmonar", description: "Cicatrização do tecido pulmonar.", symptoms: "Falta de ar, tosse seca", category: "Respiratória" },
+
+            // Doenças cardiovasculares
+            { name: "Hipertensão", description: "Pressão arterial elevada.", symptoms: "Geralmente assintomática", category: "Cardiovascular" },
+            { name: "Infarto", description: "Bloqueio do fluxo sanguíneo ao coração.", symptoms: "Dor no peito, falta de ar", category: "Cardiovascular" },
+            { name: "Arritmia", description: "Ritmo cardíaco irregular.", symptoms: "Palpitações, tontura", category: "Cardiovascular" },
+            { name: "Insuficiência Cardíaca", description: "Coração não bombeia adequadamente.", symptoms: "Falta de ar, fadiga", category: "Cardiovascular" },
+            { name: "Aterosclerose", description: "Endurecimento das artérias.", symptoms: "Depende da artéria afetada", category: "Cardiovascular" },
+            { name: "Angina", description: "Dor no peito por falta de oxigênio.", symptoms: "Desconforto no peito", category: "Cardiovascular" },
+
+            // Doenças neurológicas
+            { name: "Enxaqueca", description: "Dor de cabeça intensa.", symptoms: "Náusea, sensibilidade à luz", category: "Neurológica" },
+            { name: "Epilepsia", description: "Distúrbio de crises convulsivas.", symptoms: "Convulsões, perda de consciência", category: "Neurológica" },
+            { name: "Alzheimer", description: "Doença neurodegenerativa.", symptoms: "Perda de memória, confusão", category: "Neurológica" },
+            { name: "Parkinson", description: "Distúrbio do movimento.", symptoms: "Tremores, rigidez muscular", category: "Neurológica" },
+            { name: "Esclerose Múltipla", description: "Doença autoimune do sistema nervoso.", symptoms: "Fadiga, dificuldade para andar", category: "Neurológica" },
+            { name: "AVC", description: "Interrupção do fluxo sanguíneo cerebral.", symptoms: "Dificuldade para falar, fraqueza", category: "Neurológica" },
+
+            // Doenças endócrinas
+            { name: "Diabetes Tipo 1", description: "Deficiência de insulina.", symptoms: "Sede excessiva, micção frequente", category: "Endócrina" },
+            { name: "Diabetes Tipo 2", description: "Resistência à insulina.", symptoms: "Fadiga, visão turva", category: "Endócrina" },
+            { name: "Hipotireoidismo", description: "Tireoide hipoativa.", symptoms: "Fadiga, ganho de peso", category: "Endócrina" },
+            { name: "Hipertireoidismo", description: "Tireoide hiperativa.", symptoms: "Perda de peso, taquicardia", category: "Endócrina" },
+            { name: "Síndrome de Cushing", description: "Excesso de cortisol.", symptoms: "Ganho de peso, estrias", category: "Endócrina" },
+            { name: "Doença de Addison", description: "Deficiência hormonal adrenal.", symptoms: "Fadiga extrema, escurecimento da pele", category: "Endócrina" },
+
+            // Doenças infecciosas
+            { name: "COVID-19", description: "Doença viral respiratória.", symptoms: "Febre, tosse, perda de olfato", category: "Infecciosa" },
+            { name: "HIV/AIDS", description: "Síndrome da imunodeficiência adquirida.", symptoms: "Febre, perda de peso", category: "Infecciosa" },
+            { name: "Dengue", description: "Doença viral transmitida por mosquito.", symptoms: "Febre alta, dor muscular", category: "Infecciosa" },
+            { name: "Zika", description: "Infecção viral transmitida por mosquito.", symptoms: "Febre leve, erupção cutânea", category: "Infecciosa" },
+            { name: "Malária", description: "Doença parasitária.", symptoms: "Febre, calafrios", category: "Infecciosa" },
+            { name: "Meningite", description: "Inflamação das meninges.", symptoms: "Febre, dor de cabeça intensa", category: "Infecciosa" },
+
+            // Doenças reumatológicas
+            { name: "Artrite Reumatoide", description: "Doença autoimune das articulações.", symptoms: "Dor articular, inchaço", category: "Reumatológica" },
+            { name: "Lúpus", description: "Doença autoimune sistêmica.", symptoms: "Erupção cutânea, fadiga", category: "Reumatológica" },
+            { name: "Osteoartrite", description: "Degeneração da cartilagem articular.", symptoms: "Dor nas articulações", category: "Reumatológica" },
+            { name: "Gota", description: "Artrite por cristais de ácido úrico.", symptoms: "Dor articular intensa", category: "Reumatológica" },
+            { name: "Fibromialgia", description: "Dor musculoesquelética crônica.", symptoms: "Dor generalizada, fadiga", category: "Reumatológica" },
+
+            // Doenças dermatológicas
+            { name: "Psoríase", description: "Doença autoimune da pele.", symptoms: "Manchas vermelhas com escamas", category: "Dermatológica" },
+            { name: "Eczema", description: "Inflamação da pele.", symptoms: "Coceira, vermelhidão", category: "Dermatológica" },
+            { name: "Acne", description: "Obstrução dos folículos pilosos.", symptoms: "Espinhas, cravos", category: "Dermatológica" },
+            { name: "Rosácea", description: "Vermelhidão facial crônica.", symptoms: "Vermelhidão, vasos visíveis", category: "Dermatológica" },
+            { name: "Melanoma", description: "Câncer de pele grave.", symptoms: "Mudança em pintas", category: "Dermatológica" },
+
+            // Doenças oftalmológicas
+            { name: "Catarata", description: "Opacificação do cristalino.", symptoms: "Visão nublada", category: "Oftalmológica" },
+            { name: "Glaucoma", description: "Danos ao nervo óptico.", symptoms: "Perda de visão periférica", category: "Oftalmológica" },
+            { name: "Conjuntivite", description: "Inflamação da conjuntiva.", symptoms: "Vermelhidão, coceira", category: "Oftalmológica" },
+            { name: "Degeneração Macular", description: "Deterioração da mácula.", symptoms: "Visão central turva", category: "Oftalmológica" }
+        ];
+
+        // Elementos do DOM
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const resultsContainer = document.getElementById('results-container');
+
+        // Função para buscar doenças
+        function searchDiseases() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            
+            if (searchTerm === '') {
+                showInitialMessage();
+                return;
+            }
+
+            const results = diseasesDatabase.filter(disease => 
+                disease.name.toLowerCase().includes(searchTerm) || 
+                disease.description.toLowerCase().includes(searchTerm) || 
+                disease.symptoms.toLowerCase().includes(searchTerm) ||
+                disease.category.toLowerCase().includes(searchTerm)
+            );
+
+            displayResults(results);
+        }
+
+        // Função para exibir resultados
+        function displayResults(results) {
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div class="no-results">Nenhuma doença encontrada com esse termo de busca.</div>';
+                return;
+            }
+
+            const resultsHTML = results.map(disease => `
+                <div class="disease-card">
+                    <h3 class="disease-name">${highlightText(disease.name, searchInput.value)}</h3>
+                    <span class="disease-category">${disease.category}</span>
+                    <p><strong>Descrição:</strong> ${highlightText(disease.description, searchInput.value)}</p>
+                    <p><strong>Sintomas:</strong> ${highlightText(disease.symptoms, searchInput.value)}</p>
+                </div>
+            `).join('');
+
+            resultsContainer.innerHTML = resultsHTML;
+        }
+
+        // Função para destacar o texto pesquisado
+        function highlightText(text, searchTerm) {
+            if (!searchTerm) return text;
+            
+            const regex = new RegExp(searchTerm, 'gi');
+            return text.replace(regex, match => `<span class="highlight">${match}</span>`);
+        }
+
+        // Função para mostrar mensagem inicial
+        function showInitialMessage() {
+            resultsContainer.innerHTML = `
+                <div class="no-results">
+                    <p>Digite um termo de pesquisa para encontrar informações sobre doenças.</p>
+                    <p>Exemplos: "diabetes", "dor abdominal", "respiratória"</p>
+                </div>
+            `;
+        }
+
+        // Event listeners
+        searchButton.addEventListener('click', searchDiseases);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchDiseases();
+        });
+
+        // Inicialização
+        showInitialMessage();
+    </script>
+</body>
+</html>
