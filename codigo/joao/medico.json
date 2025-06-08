@@ -1,55 +1,50 @@
-Okay, absolutely! Let's populate your doctors_data.json with some Brazilian-sounding names and relevant (but generic) biographies.
-
-Here's your updated doctors_data.json:
-
-JSON
 {
   "medicos": [
     {
       "doctorId": "101",
-      "profileUrl": "https://www.doctorprofile.com/dr-silva",
+      "profileUrl": "img/exemplomedica.jpeg",
       "Nome": "Dr. Lucas Mendes Silva",
       "urlFotoPerfil": "img/dr_lucas.jpeg",
       "biografia": "Clínico geral com mais de 15 anos de experiência, focado em atendimento humanizado e prevenção de doenças. Atua em Belo Horizonte."
     },
     {
       "doctorId": "102",
-      "profileUrl": "https://www.doctorprofile.com/dra-costa",
+      "profileUrl": "img/exemplomedica.jpeg",
       "Nome": "Dra. Isabella Santos Costa",
       "urlFotoPerfil": "img/dra_isabella.jpeg",
       "biografia": "Pediatra especializada em desenvolvimento infantil e vacinação. Dedicada a oferecer um ambiente acolhedor para crianças e suas famílias em São Paulo."
     },
     {
       "doctorId": "103",
-      "profileUrl": "https://www.doctorprofile.com/dr-souza",
+      "profileUrl": "img/exemplomedica.jpeg",
       "Nome": "Dr. Rafael Oliveira Souza",
       "urlFotoPerfil": "img/dr_rafael.jpeg",
       "biografia": "Cardiologista renomado com expertise em diagnósticos avançados e tratamentos de doenças coronarianas. Atende no Rio de Janeiro."
     },
     {
       "doctorId": "104",
-      "profileUrl": "https://www.doctorprofile.com/dra-pereira",
+      "profileUrl": "img/exemplomedica.jpeg",
       "Nome": "Dra. Camila Fernandes Pereira",
       "urlFotoPerfil": "img/dra_camila.jpeg",
       "biografia": "Dermatologista com foco em tratamentos estéticos e saúde da pele, incluindo acne e rejuvenescimento. Clínica localizada em Porto Alegre."
     },
     {
       "doctorId": "105",
-      "profileUrl": "https://www.doctorprofile.com/dr-almeida",
+      "profileUrl": "img/exemplomedica.jpeg",
       "Nome": "Dr. Gabriel Rocha Almeida",
       "urlFotoPerfil": "img/dr_gabriel.jpeg",
       "biografia": "Ortopedista e traumatologista com experiência em lesões esportivas e cirurgias de joelho. Consultório em Brasília."
     },
     {
       "doctorId": "106",
-      "profileUrl": "https://www.doctorprofile.com/dra-nunes",
+      "profileUrl": "img/exemplomedica.jpeg",
       "Nome": "Dra. Juliana Ribeiro Nunes",
       "urlFotoPerfil": "img/dra_juliana.jpeg",
       "biografia": "Ginecologista e obstetra, oferece acompanhamento completo para mulheres em todas as fases da vida, da adolescência à menopausa. Atende em Salvador."
     },
     {
       "doctorId": "107",
-      "profileUrl": "https://www.doctorprofile.com/dr-martins",
+      "profileUrl": "img/exemplomedica.jpeg",
       "Nome": "Dr. Pedro Henrique Martins",
       "urlFotoPerfil": "img/dr_pedro.jpeg",
       "biografia": "Psiquiatra com abordagem terapêutica integrativa para ansiedade, depressão e transtornos do humor. Consultas online e presenciais em Recife."
