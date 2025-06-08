@@ -1,9 +1,18 @@
 {
-"doctorId": "1",
-    "profileUrl": "url.com",
-    "informacoesPessoais": {
+"medicos": [
+    {
+        "doctorId": "1",
+        "profileUrl": "https://google.com",
+        "Nome": "Emily",
+        "urlFotoPerfil": "img/exemplomedica.jpeg",
+        "biografia": "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+        "doctorId": "1",
+        "profileUrl": "https://google.com",
         "Nome": "Emily",
         "urlFotoPerfil": "img/exemplomedica.jpeg",
         "biografia": "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     }
+]
 }
