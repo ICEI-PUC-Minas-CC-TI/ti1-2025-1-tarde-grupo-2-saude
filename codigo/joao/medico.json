@@ -49,5 +49,51 @@
       "urlFotoPerfil": "img/dr_pedro.jpeg",
       "biografia": "Psiquiatra com abordagem terapêutica integrativa para ansiedade, depressão e transtornos do humor. Consultas online e presenciais em Recife."
     }
+  ],
+  "especialidades": [
+    {
+      "id": "esp_001",
+      "nome": "Clínica Geral / Médico de Família",
+      "iconeUrl": "img/icone_clinica_geral.jpeg",
+      "descricaoBreve": "O clínico geral ou médico de família é o ponto de partida para a maioria dos cuidados de saúde, atuando na prevenção, diagnóstico e tratamento de diversas condições, além de encaminhamentos para especialistas.",
+      "razoesParaConsultar": [
+        "Check-up anual e exames de rotina",
+        "Sintomas gerais (febre, dor de cabeça, cansaço)",
+        "Acompanhamento de doenças crônicas (diabetes, hipertensão)",
+        "Orientações sobre saúde e bem-estar",
+        "Primeira avaliação de qualquer problema de saúde"
+      ],
+      "linkDetalhes": "https://www.suaclinica.com.br/especialidades/clinica-geral"
+    },
+    {
+      "id": "esp_002",
+      "nome": "Cardiologia",
+      "iconeUrl": "img/icone_cardiologia.jpeg",
+      "descricaoBreve": "A Cardiologia é a especialidade médica dedicada ao estudo, diagnóstico e tratamento das doenças do coração e do sistema circulatório.",
+      "razoesParaConsultar": [
+        "Dor no peito ou desconforto torácico",
+        "Pressão alta (hipertensão arterial)",
+        "Palpitações ou arritmias cardíacas",
+        "Histórico familiar de doenças cardíacas",
+        "Falta de ar ou fadiga excessiva",
+        "Check-up preventivo para saúde do coração"
+      ],
+      "linkDetalhes": "https://www.suaclinica.com.br/especialidades/cardiologia"
+    },
+    {
+      "id": "esp_003",
+      "nome": "Dermatologia",
+      "iconeUrl": "img/icone_dermatologia.jpeg",
+      "descricaoBreve": "A Dermatologia é a área da medicina que cuida da saúde da pele, cabelos, unhas e mucosas, tratando doenças e realizando procedimentos estéticos.",
+      "razoesParaConsultar": [
+        "Acne e manchas na pele",
+        "Queda de cabelo ou problemas no couro cabeludo",
+        "Alergias e irritações cutâneas",
+        "Verrugas, pintas e lesões suspeitas",
+        "Unhas fracas ou com infecções",
+        "Procedimentos estéticos (botox, preenchimentos)"
+      ],
+      "linkDetalhes": "https://www.suaclinica.com.br/especialidades/dermatologia"
+    }
   ]
 }
