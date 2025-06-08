@@ -1,61 +1,94 @@
-/*
-let medico = {
-    "doctorId": "1",
-    "profileUrl": "https://google.com",
-    "informacoesPessoais": {
-        "Nome": "Emily",
-        "urlFotoPerfil": "img/exemplomedica.jpeg",
-        "biografia": "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    }
-}
-*/
-/*
-async function loadAllData() {
-    try 
-    {
-        const medicoResponse = await fetch('codigo/joao/medico.json');
+let allSpecialties = []; 
 
-        if (!medicoResponse.ok) {
-            throw new Error(`HTTP error! status: ${medicoResponse.status}`);
+async function displaySpecialtyDetails(specialtyId) 
+{
+    const sidebarArea = document.querySelector('.sidebar-area');
+    if (!sidebarArea) 
+    {
+        console.error("Sidebar area not found in the DOM.");
+        return;
+    }
+
+    const chosenSpecialty = allSpecialties.find(s => s.id === specialtyId);
+
+    if (chosenSpecialty) 
+    {
+        const specialtyTitleElem = sidebarArea.querySelector('.card-title-esp');
+        const specialtyImgElem = sidebarArea.querySelector('.card-img-esp');
+        const specialtyImgLink = specialtyImgElem ? specialtyImgElem.closest('a') : null;
+        const reasonsListElem = sidebarArea.querySelector('.card-body ul');
+        const specialtyDescElem = sidebarArea.querySelector('.card-body p.card-text');
+
+        if (specialtyTitleElem) 
+        {
+            specialtyTitleElem.textContent = chosenSpecialty.nome;
+        }
+        if (specialtyImgElem) 
+        {
+            specialtyImgElem.src = chosenSpecialty.iconeUrl;
+            specialtyImgElem.alt = `Ícone de ${chosenSpecialty.nome}`;
+        }
+        if (specialtyImgLink) 
+        {
+            specialtyImgLink.href = chosenSpecialty.linkDetalhes || '#';
+        }
+        if (specialtyDescElem) 
+        {
+            specialtyDescElem.textContent = chosenSpecialty.descricaoBreve;
         }
 
-        const medico = await medicoResponse.json();
-
-        console.log("medico:", medico);
-
-    } 
-    catch (error) 
+        if (reasonsListElem) 
+        {
+            reasonsListElem.innerHTML = '';
+            chosenSpecialty.razoesParaConsultar.forEach(reason => {
+                const li = document.createElement('li');
+                li.textContent = reason;
+                reasonsListElem.appendChild(li);
+            });
+        }
+    } else 
     {
-        console.error("Error loading data:", error);
+        sidebarArea.querySelector('.card-title-esp').textContent = 'Especialidade Não Encontrada';
+        sidebarArea.querySelector('.card-img-esp').src = 'img/placeholder.jpeg';
+        sidebarArea.querySelector('.card-img-esp').alt = 'Especialidade não encontrada';
+        sidebarArea.querySelector('.card-body p.card-text').textContent = 'Selecione uma especialidade válida.';
+        sidebarArea.querySelector('.card-body ul').innerHTML = '<li>Nenhuma informação disponível.</li>';
+        console.warn(`Specialty with ID "${specialtyId}" not found.`);
     }
 }
-    */
 
-async function loadDoctorsData() {
+async function loadDoctorsForSpecialty(specialtyId) 
+{
     const cardMedicoContainer = document.getElementById('cardMedico');
-
-    if (cardMedicoContainer) {
-        cardMedicoContainer.innerHTML = '<p>Carregando médicos...</p>';
+    if (!cardMedicoContainer) 
+    {
+        console.error("Container #cardMedico not found in the DOM.");
+        return;
     }
 
-    try {
+    cardMedicoContainer.innerHTML = '<p>Carregando médicos para esta especialidade...</p>';
+
+    try 
+    {
         const response = await fetch('medico.json');
-        if (!response.ok) {
+        if (!response.ok) 
+        {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
+        let doctors = data.medicos;
 
-        const doctors = data.medicos;
+        const filteredDoctors = doctors.filter(doctor => doctor.specialtyId === specialtyId);
 
-        if (cardMedicoContainer) {
-            cardMedicoContainer.innerHTML = '';
-        }
+        cardMedicoContainer.innerHTML = ''; 
 
-        if (doctors && doctors.length > 0) {
-            doctors.forEach(doctor => {
+        if (filteredDoctors && filteredDoctors.length > 0) 
+        {
+            filteredDoctors.forEach(doctor => {
                 const doctorCard = document.createElement('div');
                 doctorCard.className = 'card'; 
+
                 doctorCard.innerHTML = `
                     <a href="${doctor.profileUrl || '#'}" style="display: inline-block; text-decoration: none; border: none;">
                         <img src="${doctor.urlFotoPerfil}" class="card-img-top" alt="Foto de perfil de ${doctor.Nome}">
@@ -65,51 +98,92 @@ async function loadDoctorsData() {
                         <p class="card-text">${doctor.biografia}</p>
                     </div>
                 `;
-
-                if (cardMedicoContainer) {
-                    cardMedicoContainer.appendChild(doctorCard);
-                }
+                cardMedicoContainer.appendChild(doctorCard);
             });
-        } else {
-            if (cardMedicoContainer) {
-                cardMedicoContainer.innerHTML = '<p>Nenhum médico encontrado no momento.</p>';
-            }
+        } else 
+    {
+            cardMedicoContainer.innerHTML = '<p>Nenhum médico encontrado para esta especialidade no momento.</p>';
         }
 
-    } catch (error) {
+    } 
+    catch (error) 
+    {
         console.error("Erro ao carregar dados dos médicos:", error);
-
-        if (cardMedicoContainer) {
-            cardMedicoContainer.innerHTML = '<p style="color: red;">Não foi possível carregar os médicos. Tente novamente mais tarde.</p>';
-        }
+        cardMedicoContainer.innerHTML = '<p style="color: red;">Não foi possível carregar os médicos. Tente novamente mais tarde.</p>';
     }
 }
 
-document.addEventListener('DOMContentLoaded', loadDoctorsData);
+async function setupSpecialtyDropdown() 
+{
+    const specialtySelect = document.getElementById('specialtySelect');
+    if (!specialtySelect) 
+    {
+        console.error("Dropdown element #specialtySelect not found.");
+        return;
+    }
 
-/*
-function carregaMedico(medico) {
-    // Select all cards inside #cardMedico
-    const cards = document.querySelectorAll("#cardMedico .card");
-    cards.forEach(card => {
-        // Update the image
-        const img = card.querySelector("img");
-        if (img) img.src = medico.informacoesPessoais.urlFotoPerfil;
+    try 
+    {
+        const response = await fetch('medico.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        allSpecialties = data.especialidades;
 
-        const link = card.querySelector("a");
-        if (link) link.href = medico.profileUrl;
+        specialtySelect.innerHTML = '';
 
-        // Update the doctor's name
-        const title = card.querySelector(".card-title");
-        if (title) title.textContent = medico.informacoesPessoais.Nome;
+        const defaultOption = document.createElement('option');
+        defaultOption.value = "";
+        defaultOption.textContent = "Selecione uma especialidade...";
+        defaultOption.selected = true; 
+        defaultOption.disabled = true; 
+        specialtySelect.appendChild(defaultOption);
 
-        // Update the doctor's bio
-        const text = card.querySelector(".card-text");
-        if (text) text.textContent = medico.informacoesPessoais.biografia;
-    });
+        allSpecialties.forEach(specialty => 
+        {
+            const option = document.createElement('option');
+            option.value = specialty.id;
+            option.textContent = specialty.nome;
+            specialtySelect.appendChild(option);
+        });
+
+        specialtySelect.addEventListener('change', (event) => {
+            const selectedSpecialtyId = event.target.value;
+            if (selectedSpecialtyId) 
+            {
+                displaySpecialtyDetails(selectedSpecialtyId);
+                loadDoctorsForSpecialty(selectedSpecialtyId);
+            }
+        });
+
+        if (allSpecialties.length > 0) 
+        {
+             specialtySelect.value = allSpecialties[0].id;
+             displaySpecialtyDetails(allSpecialties[0].id);
+             loadDoctorsForSpecialty(allSpecialties[0].id);
+        } else 
+        {
+             specialtySelect.innerHTML = '<option value="">Nenhuma especialidade disponível</option>';
+             specialtySelect.disabled = true;
+             document.querySelector('.sidebar-area').innerHTML = '<p style="color: red;">Não foi possível carregar as especialidades.</p>';
+             document.getElementById('cardMedico').innerHTML = '<p style="color: red;">Não foi possível carregar os médicos.</p>';
+        }
+
+
+    } catch (error) 
+    {
+        console.error("Erro ao configurar o dropdown de especialidades:", error);
+        specialtySelect.innerHTML = '<option value="">Erro ao carregar especialidades</option>';
+        specialtySelect.disabled = true;
+        document.querySelector('.sidebar-area').innerHTML = '<p style="color: red;">Erro ao carregar especialidades.</p>';
+        document.getElementById('cardMedico').innerHTML = '<p style="color: red;">Erro ao carregar médicos.</p>';
+    }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    carregaMedico(medico);
+document.addEventListener('DOMContentLoaded', () => 
+{
+    setupSpecialtyDropdown();
 });
-*/
+
+document.addEventListener('DOMContentLoaded', loadDoctorsData);
