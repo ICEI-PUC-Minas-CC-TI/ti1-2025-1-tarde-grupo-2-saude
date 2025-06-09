@@ -23,9 +23,8 @@ async function displaySpecialtyDetails(specialtyId)
         {
             specialtyTitleElem.textContent = chosenSpecialty.nome;
         }
-        if (specialtyImgElem) 
-        {
-            specialtyImgElem.src = chosenSpecialty.iconeUrl;
+        if (specialtyImgElem) {
+            specialtyImgElem.src = chosenSpecialty.iconeUrl || 'img/placeholder.jpeg';
             specialtyImgElem.alt = `Ícone de ${chosenSpecialty.nome}`;
         }
         if (specialtyImgLink) 
@@ -34,16 +33,39 @@ async function displaySpecialtyDetails(specialtyId)
         }
         if (specialtyDescElem) 
         {
-            specialtyDescElem.textContent = chosenSpecialty.descricaoBreve;
+            specialtyDescElem.textContent = chosenSpecialty.descricao;
         }
 
-        if (reasonsListElem) 
-        {
-            reasonsListElem.innerHTML = '';
-            chosenSpecialty.razoesParaConsultar.forEach(reason => {
+        const doencasListElem = sidebarArea.querySelector('.doencas-list');
+        if (doencasListElem) {
+            doencasListElem.innerHTML = '';
+            const title = document.createElement('strong');
+            title.textContent = 'Condições tratadas pela especialidade';
+            doencasListElem.appendChild(title);
+            doencasListElem.appendChild(document.createElement('br'));
+            chosenSpecialty.doencas_principais.forEach(reason => {
                 const li = document.createElement('li');
                 li.textContent = reason;
-                reasonsListElem.appendChild(li);
+                doencasListElem.appendChild(li);
+            });
+        }
+
+        const sintomasListElem = sidebarArea.querySelector('.sintomas-list');
+        if (sintomasListElem) {
+            sintomasListElem.innerHTML = '';
+            const title = document.createElement('strong');
+            title.textContent = 'Sintomas principais';
+            sintomasListElem.appendChild(title);
+            sintomasListElem.appendChild(document.createElement('br'));
+
+            let sintomas = chosenSpecialty.sintomas_chave;
+            if (!Array.isArray(sintomas)) {
+                sintomas = sintomas ? [sintomas] : [];
+            }
+            sintomas.forEach(sintoma => {
+                const li = document.createElement('li');
+                li.textContent = sintoma;
+                sintomasListElem.appendChild(li);
             });
         }
     } else 
