@@ -1,0 +1,56 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f4f4f4;
+  color: #333;
+}
+
+.banner {
+  background: linear-gradient(90deg, #007BFF, #00C9A7);
+  color: white;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 20px;
+}
+
+.card {
+  width: 150px;
+  height: 150px;
+  background: #ccc;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+
+.janeiro    { background-color: #ffffff; color: #333; border: 2px solid #ccc; }
+.fevereiro  { background: linear-gradient(45deg, #800080, #ff6600); }
+.marco      { background-color: #003366; }
+.abril      { background-color: #0000ff; }
+.maio       { background-color: #ffd700; color: #000; }
+.junho      { background-color: #ff0000; }
+.julho      { background-color: #ffa500; }
+.agosto     { background-color: #dda0dd; }
+.setembro   { background-color: #ffcc00; color: #000; }
+.outubro    { background-color: #ff69b4; }
+.novembro   { background-color: #0000cd; }
+.dezembro   { background-color: #b22222; }

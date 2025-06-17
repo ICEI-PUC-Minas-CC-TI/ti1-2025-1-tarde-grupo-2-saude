@@ -1,0 +1,20 @@
+[
+  {
+    "nome": "Diabetes Mellitus tipo 2",
+    "cid": "E11",
+    "descricao": "Transtorno metabólico caracterizado por hiperglicemia crônica devido à resistência à insulina.",
+    "causas": "Obesidade, sedentarismo, predisposição genética.",
+    "sintomas": "Sede excessiva, urina frequente, visão turva, cansaço.",
+    "tratamentos": "Mudança de estilo de vida, antidiabéticos orais, insulina.",
+    "prevencao": "Atividade física regular, dieta balanceada, controle de peso."
+  },
+  {
+    "nome": "Hipertensão essencial (primária)",
+    "cid": "I10",
+    "descricao": "Condição em que a pressão arterial está persistentemente elevada sem causa identificável.",
+    "causas": "Fatores genéticos, dieta rica em sal, obesidade.",
+    "sintomas": "Geralmente assintomática, mas pode causar dor de cabeça, tontura.",
+    "tratamentos": "Antihipertensivos, controle do peso, redução de sal.",
+    "prevencao": "Dieta saudável, controle do estresse, exercícios físicos."
+  }
+]
