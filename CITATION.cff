@@ -1,31 +1,22 @@
 cff-version: 1.0.1
 message: Please cite this software using these metadata.
-title: 
+title: Sistema de Saúde - Grupo 2
 authors:
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names:
+  - family-names: Garcia dos Santos
+    given-names: Maria Luiza
+  - family-names: Bellesia
+    given-names: João Ricardo de Oliveira
+  - family-names: Zacarias
+    given-names: Gabriel Lucas Brasileiro
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
-  - name-suffix: Professor
-    affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: Diniz
+    given-names: Luciana Mara Freitas
 keywords:
-  - 
-  - 
-repository-code: 
+  - saúde
+  - sistema
+  - grupo2
+repository-code: https://github.com/ICEI-PUC-Minas-CC-TI/ti1-2025-1-tarde-grupo-2-saude
 license: CC-BY-4.0
 version: 1.0.0
 date-released: 2022-07-14
