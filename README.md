@@ -5,22 +5,14 @@ Escreva um ou dois parágrafo resumindo o objetivo do seu projeto.
 
 ## Alunos integrantes da equipe
 
-* Maria Luiza
+* Maria Luiza Garcia dos Santos
 * João Ricardo de Oliveira Bellesia
 * Gabriel Lucas Brasileiro Zacarias
 
 ## Professores responsáveis
 
 * Luciana Mara Freitas Diniz
-
-
-
-## Instruções de utilização 
-
-> **IMPORTANTE: APAGUE ESSA SEÇÃO DE INSTRUÇÕES ANTES DE ENTREGAR SEU TRABALHO**
-
-No desenvolvimento desse trabalho, o grupo deverá utilizar esse repositório como local para entrega de todos os artefatos a serem produzidos. Em especial, o grupo deverá providenciar a alteração dos seguintes arquivos:
-
+  
 * **Capa do projeto** (Esse arquivo aqui): Informação básica sobre o projeto, alunos do grupo e professores responsáveis;
 * **Arquivo CITATION.cff**: descritor do projeto, utilizado para geração do certificado ao final da disciplina.
 * **Pasta código**: todos os arquivos resultantes da programação do software.
