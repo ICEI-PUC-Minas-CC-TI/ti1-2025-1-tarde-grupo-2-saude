@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulta e Campanhas de Saúde</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .banner {
+      background-color: white;
+      color: #333;
+      padding: 30px 0;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    .mes-section {
+      padding: 40px 20px;
+    }
+    nav a {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body class="bg-light">
+
+  <header class="bg-white border-bottom py-3 mb-4">
+    <div class="container d-flex align-items-center">
+      <img src="img/logo.png" alt="Logo SaúdeTotal" width="48" height="48" class="me-3" style="object-fit:contain;">
+      <span class="fs-3 fw-bold text-success">Doctor Who</span>
+    </div>
+  </header>
+
+  <div class="container py-5">
+    <h1 class="text-center mb-4">Consulta de Doenças</h1>
+    <div class="mb-3">
+      <label for="nomeInput" class="form-label">Buscar por Nome da Doença:</label>
+      <input type="text" id="nomeInput" class="form-control" placeholder="Ex: Diabetes" oninput="buscar()">
+    </div>
+    <div class="mb-3">
+      <label for="cidInput" class="form-label">Buscar por Código CID:</label>
+      <input type="text" id="cidInput" class="form-control" placeholder="Ex: E11" oninput="buscar()">
+    </div>
+    <div id="resultado" class="mt-4"></div>
+
+    <div class="text-center mt-3">
+      <a href="medico.html" class="btn btn-success">Ver Lista de Médicos Disponíveis</a>
+    </div>
+    <div class="text-center mt-3">
+      <a href="medicoadd.html" class="btn btn-success">Adicionar Médicos ao Database</a>
+    </div>
+  </div>
+
+  <div id="campanhas" class="banner">
+    <h2>Campanhas de Conscientização</h2>
+    <nav class="mb-3">
+      <a href="campanhas/janeiro.html" class="btn btn-outline-dark btn-sm">Janeiro</a>
+      <a href="campanhas/fevereiro.html" class="btn btn-outline-dark btn-sm">Fevereiro</a>
+      <a href="campanhas/marco.html" class="btn btn-outline-dark btn-sm">Março</a>
+      <a href="campanhas/abril.html" class="btn btn-outline-dark btn-sm">Abril</a>
+      <a href="campanhas/maio.html" class="btn btn-outline-dark btn-sm">Maio</a>
+      <a href="campanhas/junho.html" class="btn btn-outline-dark btn-sm">Junho</a>
+      <a href="campanhas/julho.html" class="btn btn-outline-dark btn-sm">Julho</a>
+      <a href="campanhas/agosto.html" class="btn btn-outline-dark btn-sm">Agosto</a>
+      <a href="campanhas/setembro.html" class="btn btn-outline-dark btn-sm">Setembro</a>
+      <a href="campanhas/outubro.html" class="btn btn-outline-dark btn-sm">Outubro</a>
+      <a href="campanhas/novembro.html" class="btn btn-outline-dark btn-sm">Novembro</a>
+      <a href="campanhas/dezembro.html" class="btn btn-outline-dark btn-sm">Dezembro</a>
+    </nav>
+  </div>
+
+  <div class="container">
+  </div>
+
+  <script src="js/script2.js"></script>
+</body>
+<footer class="bg-white border-top py-3 mt-5">
+  <div class="container text-center text-muted" style="font-size: 0.95rem;">
+    &copy; 2025 SaúdeTotal • Projeto Interdisciplinar PUC Minas • Grupo 2 - Tarde
+  </div>
+</footer>
+</html>
